@@ -3,7 +3,5 @@
 # platform: win-64
 numpy==1.24.3
 pandas==2.2.1
-inflection==0.5.1
 flask==2.2.5
-xgboost==1.7.3
-scikit-learn==1.3.0
+requests==2.31.0
