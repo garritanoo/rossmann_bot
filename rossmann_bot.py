@@ -118,4 +118,4 @@ def index():
         return '<h1>Rossmann Telegram Bot</h1>'
 
 if __name__ == 'main':
-    app.run('0.0.0.0', PORT=5000)
+    app.run('0.0.0.0')
