@@ -5,19 +5,19 @@ from flask import Flask, request, Response
 
 
 # # Informações sobre o bot
-# https://api.telegram.org/bot7131396413:AAFbXA9tqZmpO8AuTJkY0gp9D8LZQCa3vPk/getMe
+# https://api.telegram.org/bot6780742688:AAHQtyyjUpHs-N3kLefLnsxntF3ZDitVLVE/getMe
 
 # # get updates
-# https://api.telegram.org/bot7131396413:AAFbXA9tqZmpO8AuTJkY0gp9D8LZQCa3vPk/getUpdate
+# https://api.telegram.org/bot6780742688:AAHQtyyjUpHs-N3kLefLnsxntF3ZDitVLVE/getUpdates
 
 # # enviando mensagens
-# https://api.telegram.org/bot7131396413:AAFbXA9tqZmpO8AuTJkY0gp9D8LZQCa3vPk/sendMessage?chat_id=&text=Hi Jubinha
+# https://api.telegram.org/bot6780742688:AAHQtyyjUpHs-N3kLefLnsxntF3ZDitVLVE/sendMessage?chat_id=1053488543&text=Olá, Jubinha!
 
 # # webhook
-# https://api.telegram.org/bot7131396413:AAFbXA9tqZmpO8AuTJkY0gp9D8LZQCa3vPk/setWebhook?url=https://02a79c40bed0d8.lhr.life
+# https://api.telegram.org/bot6780742688:AAHQtyyjUpHs-N3kLefLnsxntF3ZDitVLVE/setWebhook?url=https://d7a5e539f37c8a.lhr.life
 
 # constantes
-TOKEN = '7131396413:AAFbXA9tqZmpO8AuTJkY0gp9D8LZQCa3vPk'
+TOKEN = '6780742688:AAHQtyyjUpHs-N3kLefLnsxntF3ZDitVLVE'
 
 def send_message(chat_id, text):
     url = f'https://api.telegram.org/bot{TOKEN}'
@@ -54,7 +54,7 @@ def load_dataset(store_id):
 
 def predict(data):
     # API CALL
-    url = 'https://rossmann-telegram-bot-1.onrender.com'
+    url = 'https://rossmann-bot-7ud3.onrender.com/rossmann/predict'
     header = {'Content-type': 'application/json'}
     data = data
 
@@ -67,7 +67,7 @@ def predict(data):
 
 def parse_message(message):
     chat_id = message['message']['chat']['id']
-    store_id = message['message']['chat']['id']
+    store_id = message['message']['text']
     
     store_id = store_id.replace('/', '')
     
@@ -96,13 +96,14 @@ def index():
             data = load_dataset(store_id)
             
             if data != 'error':
-            
                 # prediction
                 d1 = predict(data)
                 
                 # calculation
                 d2 = d1[['store', 'prediction']].groupby('store').sum().reset_index()
-                msg = (f'A Loja { d2.loc["store"].values[0] } venderá { d2.loc["prediction"].values[0] } nas próximas 6 semanas')
+                msg = (f"""A Loja { d2["store"].values[0] }
+                          venderá { d2["prediction"].values[0] }
+                          nas próximas 6 semanas""")
                 
                 # send message
                 send_message(chat_id, msg)
@@ -117,6 +118,4 @@ def index():
         return '<h1>Rossmann Telegram Bot</h1>'
 
 if __name__ == 'main':
-    app.run('0.0.0.0', PORT=5000)
-
-        
+    app.run('localhost', PORT=5000)
