@@ -4,19 +4,6 @@ import os
 import requests
 from flask import Flask, request, Response
 
-
-# # Informações sobre o bot
-# https://api.telegram.org/bot6780742688:AAHQtyyjUpHs-N3kLefLnsxntF3ZDitVLVE/getMe
-
-# # get updates
-# https://api.telegram.org/bot6780742688:AAHQtyyjUpHs-N3kLefLnsxntF3ZDitVLVE/getUpdates
-
-# # enviando mensagens
-# https://api.telegram.org/bot6780742688:AAHQtyyjUpHs-N3kLefLnsxntF3ZDitVLVE/sendMessage?chat_id=1053488543&text=Olá!
-
-# # webhook
-# https://api.telegram.org/bot6780742688:AAHQtyyjUpHs-N3kLefLnsxntF3ZDitVLVE/setWebhook?url=https://d7a5e539f37c8a.lhr.life
-
 # constantes
 TOKEN = os.environ.get('TOKEN')
 
