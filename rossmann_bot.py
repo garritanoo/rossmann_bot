@@ -1,5 +1,6 @@
 import pandas as pd
 import json
+import os
 import requests
 from flask import Flask, request, Response
 
@@ -17,7 +18,7 @@ from flask import Flask, request, Response
 # https://api.telegram.org/bot6780742688:AAHQtyyjUpHs-N3kLefLnsxntF3ZDitVLVE/setWebhook?url=https://d7a5e539f37c8a.lhr.life
 
 # constantes
-TOKEN = '6780742688:AAHQtyyjUpHs-N3kLefLnsxntF3ZDitVLVE'
+TOKEN = os.environ['TOKEN']
 
 def send_message(chat_id, text):
     url = f'https://api.telegram.org/bot{TOKEN}'
@@ -118,4 +119,5 @@ def index():
         return '<h1>Rossmann Telegram Bot</h1>'
 
 if __name__ == 'main':
-    app.run('0.0.0.0')
+    port = os.environ.get('PORT', 5000)
+    app.run('0.0.0.0', port=port)
