@@ -18,7 +18,7 @@ from flask import Flask, request, Response
 # https://api.telegram.org/bot6780742688:AAHQtyyjUpHs-N3kLefLnsxntF3ZDitVLVE/setWebhook?url=https://d7a5e539f37c8a.lhr.life
 
 # constantes
-TOKEN = os.environ('TOKEN')
+TOKEN = os.environ.get('TOKEN')
 
 def send_message(chat_id, text):
     url = f'https://api.telegram.org/bot{TOKEN}'
