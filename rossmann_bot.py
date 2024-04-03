@@ -18,7 +18,7 @@ def send_message(chat_id, text):
 
 def load_dataset(store_id):
     # Carregando dados de teste
-    df10 = pd.read_csv('datasets/raw/test.csv')
+    df10 = pd.read_csv('datasets/raw/test.csv', low_memory=False)
     df_store_raw = pd.read_csv('datasets/raw/store.csv', low_memory=False)
 
     # Mesclando dataset de test e store
@@ -44,9 +44,9 @@ def predict(data):
     # API CALL
     url = 'https://rossmann-store-predict.onrender.com/rossmann/predict'
     header = {'Content-type': 'application/json'}
-    data = data
+    df = data
 
-    r = requests.post(url, data=data, headers=header)
+    r = requests.post(url, data=df, headers=header)
     print(f'Status Code {r.status_code}')
 
     d1 = pd.DataFrame(r.json(), columns=r.json()[0].keys())
@@ -63,7 +63,7 @@ def parse_message(message):
         store_id = int(store_id)
         
     except ValueError:
-        send_message('O Store ID está errado')
+        send_message(chat_id, 'O Store ID está errado')
         store_id = 'error'
     
     return chat_id, store_id
@@ -80,31 +80,35 @@ def index():
         chat_id, store_id = parse_message(message)
         
         if store_id != 'error':
-            # load data
+            # carrega data
             data = load_dataset(store_id)
             
             if data != 'error':
+            
                 # prediction
-                d1 = predict(data)
+                d1 = predict(data)            
                 
                 # calculation
                 d2 = d1[['store', 'prediction']].groupby('store').sum().reset_index()
+                
+                # send message
                 msg = (f"""A Loja { d2["store"].values[0] }
                           venderá { d2["prediction"].values[0] }
                           nas próximas 6 semanas""")
                 
-                # send message
                 send_message(chat_id, msg)
                 return Response('Ok', status=200)
                 
             else:
-                send_message(chat_id, 'A loja não está válida')
+                send_message(chat_id, f'A loja {store_id} não é válida')
+                return Response('Ok', status=200)
+        
         else:
-            send_message(chat_id, 'Store ID está errado.')
+            send_message(chat_id, f'O Store ID {store_id} não existe.')
             return Response('Ok', status=200)
     else:
         return '<h1>Rossmann Telegram Bot</h1>'
 
 if __name__ == 'main':
     port = os.environ.get('PORT', 5000)
-    app.run('0.0.0.0', port=port)
+    app.run(host='0.0.0.0', port=port)
