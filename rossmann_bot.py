@@ -8,7 +8,7 @@ from flask import Flask, request, Response
 TOKEN = os.environ.get('TOKEN')
 
 def send_message(chat_id, text):
-    url = f'https://api.telegram.org/bot{TOKEN}'
+    url = f'https://api.telegram.org/bot{TOKEN}/'
     url = url + f'sendMessage?chat_id={chat_id}'
     
     r = requests.post(url, json={'text': text})
