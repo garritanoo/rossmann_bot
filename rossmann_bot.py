@@ -40,13 +40,13 @@ def load_dataset(store_id):
     
     return data
 
-def predict(data):
+def predict(df):
     # API CALL
     url = 'https://rossmann-store-predict.onrender.com/rossmann/predict'
     header = {'Content-type': 'application/json'}
-    df = data
+    data = df
 
-    r = requests.post(url, data=df, headers=header)
+    r = requests.post(url, data=data, headers=header)
     print(f'Status Code {r.status_code}')
 
     d1 = pd.DataFrame(r.json(), columns=r.json()[0].keys())
