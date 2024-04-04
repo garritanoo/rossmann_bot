@@ -8,8 +8,7 @@ from flask import Flask, request, Response
 TOKEN = os.environ.get('TOKEN')
 
 def send_message(chat_id, text):
-    url = f'https://api.telegram.org/bot{TOKEN}/'
-    url = url + f'sendMessage?chat_id={chat_id}'
+    url = f'https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}'
     
     r = requests.post(url, json={'text': text})
     print(f'Status Code: {r.status_code}')
@@ -27,7 +26,7 @@ def load_dataset(store_id):
     # Escolhendo lojas para predição
     df_test = df_test[df_test['Store'] == store_id]
 
-    if not df_test.empty():
+    if not df_test.empty:
         ## Removendo dias que a loja ficaram fechados
         df_test = df_test[df_test['Open'] != 0]
         df_test = df_test[~df_test['Open'].isnull()]
